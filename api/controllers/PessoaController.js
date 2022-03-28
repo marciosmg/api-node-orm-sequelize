@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const database = require('../models')
 
 class PessoaController {
@@ -48,11 +49,21 @@ class PessoaController {
     const { id } = req.params
     try {
       await database.Pessoas.destroy( { where: { id: Number(id) } } )
-      return res.status(200).json({ mensagem: `Id ${id} foi deletado!`})
+      return res.status(200).json({ mensagem: `Id ${id} foi deletada!`})
     } catch(error) {
       return res.status(500).json(error.message)
     }
   } 
+
+  static async restauraPessoa(req, res) {
+    const { id } = req.params
+    try {
+      await database.Pessoas.restore({ where: { id: Number(id) } } )
+      return res.status(200).json({ mensagem: `Id ${id} foi restaurada!` })
+    } catch(error) {
+      return res.status(500).json(error.message)
+    }
+  }
 
   //http://localhost:3000/pessoas/:estudanteId/matricula/:matriculaId
   static async pegaUmaMatricula(req, res) {
@@ -101,7 +112,22 @@ class PessoaController {
     } catch(error) {
       return res.status(500).json(error.message)
     }
-  } 
+  }
+
+  static async restauraMatricula(req, res) {
+    const { estudanteId, matriculaId } = req.params
+    try {
+      await database.Matriculas.restore({
+        where: {
+          id: Number(matriculaId),
+          estudante_id: Number(estudanteId)
+        }
+      })
+      return res.status(200).json({ mensagem: `Matrícula ${matriculaId} foi restaurada!`})
+    } catch (error) {
+      return res.status(500).json(error.message)
+    }
+  }
 
 }
 
